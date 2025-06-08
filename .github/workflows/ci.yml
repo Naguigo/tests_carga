@@ -20,28 +20,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
 
-      - name: Install Node for k6-reporter
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Checkout k6-reporter
-        uses: actions/checkout@v4
-        with:
-          repository: grafana/k6-reporter
-          path: k6-reporter
-
-      - name: Build k6-reporter
-        run: |
-          cd k6-reporter
-          npm install
-          npm run build
 
       - name: Run k6 Test and Save JSON
         run: k6 run --out json=resultado.json teste_carga.js
 
       - name: Generate HTML Report
-        run: node k6-reporter/dist/cli.js resultado.json
+        run: npx k6-reporter resultado.json
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
