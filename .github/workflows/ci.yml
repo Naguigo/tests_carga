@@ -1,35 +1,29 @@
-name: Run carga Tests (k6)
+name: k6 Load Test with HTML Report
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   pull_request:
 
 jobs:
   k6-test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install k6
         run: |
           sudo apt-get update
-          sudo apt-get install -y gnupg software-properties-common
-          curl https://dl.k6.io/key.gpg | sudo apt-key add -
+          sudo apt-get install -y gnupg software-properties-common curl
+          curl -s https://dl.k6.io/key.gpg | sudo apt-key add -
           echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install k6
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Run k6 Test and Save JSON
-        run: k6 run --out json=resultado.json teste_carga.js
-
-      - name: Generate HTML Report
-        run: npx k6-reporter resultado.json
+      - name: Run Load Test and Generate HTML Report
+        run: |
+          k6 run teste_carga.js
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
