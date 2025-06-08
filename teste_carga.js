@@ -5,7 +5,7 @@ import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporte
 // Configura o teste para rodar com 100 usuários simultâneos por 5 minutos
 export let options = {
   vus: 100,
-  duration: '30s',
+  duration: '5m',
 };
 
 // Função principal executada por cada usuário virtual
