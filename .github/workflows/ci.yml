@@ -1,0 +1,38 @@
+jobs:
+  k6-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg software-properties-common
+          curl https://dl.k6.io/key.gpg | sudo apt-key add -
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Install Node for k6-reporter
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Clone and Build k6-reporter
+        run: |
+          git clone https://github.com/grafana/k6-reporter.git
+          cd k6-reporter
+          npm install
+          npm run build
+
+      - name: Run k6 Test and Save JSON
+        run: k6 run --out json=resultado.json teste_carga.js
+
+      - name: Generate HTML Report
+        run: node k6-reporter/dist/cli.js resultado.json
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-html-report
+          path: summary.html
