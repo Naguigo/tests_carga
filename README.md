@@ -7,4 +7,4 @@ brew install k6
 k6 run teste_carga.js
 
 ## Execução com relarorio
-k6 run --out json=resultado.json teste_carga.js# tests_carga
+k6 run --out json=resultado.json teste_carga.js

@@ -4,7 +4,7 @@ import { check, sleep } from 'k6';
 // Configura o teste para rodar com 100 usuários simultâneos por 5 minutos
 export let options = {
   vus: 100,
-  duration: '1m',
+  duration: '5m',
 };
 
 // Função principal executada por cada usuário virtual
